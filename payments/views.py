@@ -3,7 +3,6 @@ from rest_framework.response import Response
 from rest_framework import status as http_status
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
-import qrcode
 from io import BytesIO
 
 from .models import Payment
@@ -75,18 +74,3 @@ class PaymentWebhookView(APIView):
 
         p.save(update_fields=["status", "updated_at"])
         return Response({"ok": True})
-
-class PaymentQRView(APIView):
-    def get(self, request):
-        pid = request.query_params.get("id")
-        if not pid:
-            return Response({"detail": "Missing id"}, status=400)
-
-        p = get_object_or_404(Payment, payment_id=pid)
-
-        img = qrcode.make(p.qr_data)
-        buf = BytesIO()
-        img.save(buf, format="PNG")
-        buf.seek(0)
-
-        return HttpResponse(buf.getvalue(), content_type="image/png")

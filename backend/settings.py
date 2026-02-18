@@ -146,8 +146,6 @@ CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOWED_HEADERS = ["*"]
 
-AUTH_USER_MODEL = 'users.User'
-
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
